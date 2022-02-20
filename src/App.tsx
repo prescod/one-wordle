@@ -31,6 +31,7 @@ import {
   solution,
   findFirstUnusedReveal,
   unicodeLength,
+  startword,
 } from './lib/words'
 import { addStatsForCompletedGame, loadStats } from './lib/stats'
 import {
@@ -73,7 +74,7 @@ function App() {
   const [guesses, setGuesses] = useState<string[]>(() => {
     const loaded = loadGameStateFromLocalStorage()
     if (loaded?.solution !== solution) {
-      return []
+      return [startword]
     }
     const gameWasWon = loaded.guesses.includes(solution)
     if (gameWasWon) {
@@ -126,7 +127,7 @@ function App() {
   }
 
   const handleHardMode = (isHard: boolean) => {
-    if (guesses.length === 0 || localStorage.getItem('gameMode') === 'hard') {
+    if (true) {
       setIsHardMode(isHard)
       localStorage.setItem('gameMode', isHard ? 'hard' : 'normal')
     } else {
@@ -202,7 +203,8 @@ function App() {
     }
 
     // enforce hard mode - all guesses must contain all previously revealed letters
-    if (isHardMode) {
+    // uniqle inverts the meaning of hard mode
+    if (!isHardMode) {
       const firstMissingReveal = findFirstUnusedReveal(currentGuess, guesses)
       if (firstMissingReveal) {
         setCurrentRowClass('jiggle')
