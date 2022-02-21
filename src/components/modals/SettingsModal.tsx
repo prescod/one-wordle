@@ -26,7 +26,7 @@ export const SettingsModal = ({
     <BaseModal title="Settings" isOpen={isOpen} handleClose={handleClose}>
       <div className="grid-cols-2 gap-4">
         <SettingsToggle
-          settingName="Hard Mode"
+          settingName="Hard Mode *"
           flag={isHardMode}
           handleFlag={handleHardMode}
         />
@@ -41,6 +41,13 @@ export const SettingsModal = ({
           handleFlag={handleHighContrastMode}
         />
       </div>
+      <p></p>
+      <p className="text-gray-500 dark:text-gray-300">
+        * In hard mode, you lose after a wrong guess.
+      </p>
+      <p className="text-gray-500 dark:text-gray-300">
+        In normal mode, you can try multiple times.
+      </p>
     </BaseModal>
   )
 }
