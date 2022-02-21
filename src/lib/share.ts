@@ -1,7 +1,6 @@
 import { getGuessStatuses } from './statuses'
 import { solutionIndex } from './words'
 import { GAME_TITLE } from '../constants/strings'
-import { MAX_CHALLENGES } from '../constants/settings'
 
 export const shareStatus = (
   guesses: string[],
@@ -11,10 +10,12 @@ export const shareStatus = (
   isHighContrastMode: boolean
 ) => {
   navigator.clipboard.writeText(
-    `${GAME_TITLE} ${solutionIndex} ${
-      lost ? 'X' : guesses.length
-    }/${MAX_CHALLENGES}${isHardMode ? '*' : ''}\n\n` +
-      generateEmojiGrid(guesses, getEmojiTiles(isDarkMode, isHighContrastMode))
+    `${GAME_TITLE} ${solutionIndex} ${lost ? 'X' : "SOLVED!"
+    }${isHardMode ? '*' : ''}\n\n` +
+    "Clue:\n" + guesses[0] + "\n" +
+    generateEmojiGrid(guesses, getEmojiTiles(isDarkMode, isHighContrastMode))
+    + "\n"
+    + "Play here: https://prescod.github.io/one-wordle/"
   )
 }
 
