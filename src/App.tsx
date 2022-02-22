@@ -5,6 +5,7 @@ import {
 } from '@heroicons/react/outline'
 import { useState, useEffect } from 'react'
 import { Grid } from './components/grid/Grid'
+import { HintButton } from './components/grid/HintButton'
 import { Keyboard } from './components/keyboard/Keyboard'
 import { InfoModal } from './components/modals/InfoModal'
 import { StatsModal } from './components/modals/StatsModal'
@@ -73,6 +74,7 @@ function App() {
   const [isRevealing, setIsRevealing] = useState(false)
   const [guesses, setGuesses] = useState<string[]>(() => {
     const loaded = loadGameStateFromLocalStorage()
+    // FIXME:
     if (loaded?.solution !== solution) {
       return [startword]
     }
@@ -246,7 +248,23 @@ function App() {
       }
     }
   }
+  const showAnswer = (currentGuess: string) => {
+    setIsRevealing(true)
+    // turn this back off after all
+    // chars have been revealed
+    setTimeout(() => {
+      setIsRevealing(false)
+    }, REVEAL_TIME_MS * MAX_WORD_LENGTH)
 
+    setGuesses([...guesses, currentGuess])
+    setCurrentGuess('')
+    setStats(addStatsForCompletedGame(stats, guesses.length + 1))
+    setIsGameLost(true)
+    showErrorAlert(CORRECT_WORD_MESSAGE(solution), {
+      persist: true,
+      delayMs: REVEAL_TIME_MS * MAX_WORD_LENGTH + 1,
+    })
+  }
   return (
     <div className="pt-2 pb-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
       <div className="flex w-80 mx-auto items-center mb-8 mt-20">
@@ -279,6 +297,15 @@ function App() {
         guesses={guesses}
         isRevealing={isRevealing}
       />
+      <div className="flex pt-6 mb-1 justify-center">
+        <HintButton
+          solution={solution}
+          hints={guesses}
+          addHint={(hint: string) => {
+            showAnswer(hint)
+          }}
+        />
+      </div>{' '}
       <InfoModal
         isOpen={isInfoModalOpen}
         handleClose={() => setIsInfoModalOpen(false)}
@@ -305,7 +332,6 @@ function App() {
         isHighContrastMode={isHighContrastMode}
         handleHighContrastMode={handleHighContrastMode}
       />
-
       <AlertContainer />
     </div>
   )
