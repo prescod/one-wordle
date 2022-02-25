@@ -7,7 +7,8 @@ publish:
 	npm run build
 	date > build/date.txt
 	git rev-parse --short HEAD > build/commit.txt
-	cd build
+	cp -r build/* gh-pages
+	cd gh-pages
 	git add --all
 	git commit -m "$(git rev-parse --short HEAD)"
 	git push origin gh-pages --force

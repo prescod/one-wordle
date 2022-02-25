@@ -27,7 +27,9 @@ type Props = {
 const getTimerMessage = (timeSeconds: number) => {
   if (timeSeconds < 60 * 5) {
     var reward
-    if (timeSeconds < 10) {
+    if (timeSeconds < 1) {
+      return null
+    } else if (timeSeconds < 10) {
       reward = 'Astonishing!'
     } else if (timeSeconds < 30) {
       reward = 'Amazing!'
