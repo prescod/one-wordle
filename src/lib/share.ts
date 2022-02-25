@@ -7,14 +7,19 @@ export const shareStatus = (
   lost: boolean,
   isHardMode: boolean,
   isDarkMode: boolean,
-  isHighContrastMode: boolean
+  isHighContrastMode: boolean,
+  timerMessage: string | null
 ) => {
+  console.log(timerMessage)
   navigator.clipboard.writeText(
-    `${GAME_TITLE} ${solutionIndex} ${lost ? 'X' : "SOLVED!"
+    `${GAME_TITLE} ${solutionIndex} ${lost ? 'NOT SOLVED :(' : "SOLVED!"
     }${isHardMode ? '*' : ''}\n\n` +
     "Clue:\n" + guesses[0] + "\n" +
     generateEmojiGrid(guesses, getEmojiTiles(isDarkMode, isHighContrastMode))
-    + "\n"
+    + "\n" +
+    (timerMessage ? (
+      timerMessage
+      + "\n") : "")
     + "Play here: https://prescod.github.io/one-wordle/"
   )
 }

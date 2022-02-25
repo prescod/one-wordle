@@ -40,6 +40,10 @@ import {
   saveGameStateToLocalStorage,
   setStoredIsHighContrastMode,
   getStoredIsHighContrastMode,
+  saveStartTimeToLocalStorage,
+  loadStartTimeFromLocalStorage,
+  loadTimeResultFromLocalStorage,
+  saveTimeResultToLocalStorage,
 } from './lib/localStorage'
 import { default as GraphemeSplitter } from 'grapheme-splitter'
 
@@ -60,6 +64,8 @@ function App() {
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false)
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
   const [currentRowClass, setCurrentRowClass] = useState('')
+  const [startTime, setStartTime] = useState(0)
+  const [timeResult, setTimeResult] = useState(loadTimeResultFromLocalStorage())
   const [isGameLost, setIsGameLost] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem('theme')
@@ -76,8 +82,10 @@ function App() {
     const loaded = loadGameStateFromLocalStorage()
     // FIXME:
     if (loaded?.solution !== solution) {
+      setStartTime(saveStartTimeToLocalStorage())
       return [startword]
     }
+    setStartTime(loadStartTimeFromLocalStorage())
     const gameWasWon = loaded.guesses.includes(solution)
     if (gameWasWon) {
       setIsGameWon(true)
@@ -149,6 +157,21 @@ function App() {
   useEffect(() => {
     saveGameStateToLocalStorage({ guesses, solution })
   }, [guesses])
+
+  // useEffect(() => {
+  //   if (isGameWon) {
+  //     console.log(
+  //       'CALC',
+  //       Date.now().valueOf(),
+  //       startTime,
+  //       Date.now().valueOf() - startTime
+  //     )
+  //     console.log('TRR', timeResult)
+  //     if (!timeResult) {
+  //       setTimeResult(timeResult)
+  //     }
+  //   }
+  // }, [isGameWon, startTime, timeResult])
 
   useEffect(() => {
     if (isGameWon) {
@@ -235,6 +258,10 @@ function App() {
 
       if (winningWord) {
         setStats(addStatsForCompletedGame(stats, guesses.length))
+        const timeResult = Date.now().valueOf() - startTime
+        console.log(startTime, timeResult)
+        setTimeResult(timeResult)
+        saveTimeResultToLocalStorage(timeResult)
         return setIsGameWon(true)
       }
 
@@ -321,6 +348,7 @@ function App() {
         isHardMode={isHardMode}
         isDarkMode={isDarkMode}
         isHighContrastMode={isHighContrastMode}
+        timeResult={timeResult}
       />
       <SettingsModal
         isOpen={isSettingsModalOpen}

@@ -16,6 +16,8 @@ export const loadGameStateFromLocalStorage = () => {
 }
 
 const gameStatKey = 'gameStats'
+const startTimeKey = 'startTime'
+const timeResultKey = 'timeResult'
 
 export type GameStats = {
   winDistribution: number[]
@@ -28,6 +30,29 @@ export type GameStats = {
 
 export const saveStatsToLocalStorage = (gameStats: GameStats) => {
   localStorage.setItem(gameStatKey, JSON.stringify(gameStats))
+}
+
+export const saveStartTimeToLocalStorage = () => {
+  const now = Date.now().valueOf();
+  localStorage.setItem(startTimeKey, now.toString())
+  return now;
+}
+
+export const loadStartTimeFromLocalStorage = () => {
+  const startTime = localStorage.getItem(startTimeKey)
+  if (startTime) return parseInt(startTime)
+  else return Date.now().valueOf()
+}
+
+
+export const saveTimeResultToLocalStorage = (timeResult: number) => {
+  localStorage.setItem(timeResultKey, timeResult.toString())
+}
+
+export const loadTimeResultFromLocalStorage = () => {
+  const timeResult = localStorage.getItem(timeResultKey)
+  if (timeResult) return parseInt(timeResult)
+  else return 0
 }
 
 export const loadStatsFromLocalStorage = () => {

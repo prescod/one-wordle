@@ -21,6 +21,28 @@ type Props = {
   isHardMode: boolean
   isDarkMode: boolean
   isHighContrastMode: boolean
+  timeResult: number
+}
+
+const getTimerMessage = (timeSeconds: number) => {
+  if (timeSeconds < 60 * 5) {
+    var reward
+    if (timeSeconds < 10) {
+      reward = 'Astonishing!'
+    } else if (timeSeconds < 30) {
+      reward = 'Amazing!'
+    } else if (timeSeconds < 60) {
+      reward = 'Great!'
+    } else if (timeSeconds < 60 * 2) {
+      reward = 'Very Good!'
+    } else if (timeSeconds < 60 * 5) {
+      reward = 'Good!'
+    }
+    const plural = timeSeconds > 1 ? 's' : ''
+    return `${timeSeconds} second${plural}: ${reward}`
+  } else {
+    return null
+  }
 }
 
 export const StatsModal = ({
@@ -34,7 +56,10 @@ export const StatsModal = ({
   isHardMode,
   isDarkMode,
   isHighContrastMode,
+  timeResult,
 }: Props) => {
+  const seconds = Math.floor(timeResult / 1000)
+  const timerMessage = getTimerMessage(seconds)
   if (gameStats.totalGames <= 0) {
     return (
       <BaseModal
@@ -53,6 +78,13 @@ export const StatsModal = ({
       handleClose={handleClose}
     >
       <StatBar gameStats={gameStats} />
+
+      {isGameWon && timerMessage && (
+        <p className="text-lg font-medium text-gray-900 dark:text-gray-100">
+          {timerMessage}
+        </p>
+      )}
+
       {(isGameLost || isGameWon) && (
         <div className="mt-5 sm:mt-6 columns-2 dark:text-white">
           <div>
@@ -72,7 +104,8 @@ export const StatsModal = ({
                 isGameLost,
                 isHardMode,
                 isDarkMode,
-                isHighContrastMode
+                isHighContrastMode,
+                timerMessage
               )
               handleShare()
             }}
