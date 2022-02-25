@@ -10,7 +10,7 @@ publish:
 	cd build
 	git add --all
 	git commit -m "$(git rev-parse --short HEAD)"
-	git push gh-pages --force
+	git push origin gh-pages --force
 
 serve:
 	npm run start
