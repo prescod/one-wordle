@@ -35,6 +35,9 @@ export const findFirstUnusedReveal = (word: string, guesses: string[]) => {
     if (statuses[i] === 'correct' && word[i] !== guess[i]) {
       return WRONG_SPOT_MESSAGE(guess[i], i + 1)
     }
+    if (statuses[i] === 'present' && word[i] === guess[i]) {
+      return `May not use ${word[i]} in the same position as in the clue`
+    }
   }
 
   // check for the first unused letter, taking duplicate letters
