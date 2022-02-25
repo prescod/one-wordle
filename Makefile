@@ -7,9 +7,10 @@ publish:
 	npm run build
 	date > build/date.txt
 	git rev-parse --short HEAD > build/commit.txt
-	git add build/*
-	git commit build/* --message "Build"
-	git subtree push --prefix build origin gh-pages
+	cd build
+	git add --all
+	git commit -m "$(git rev-parse --short HEAD)"
+	git push origin gh-pages --force
 
 serve:
 	npm run start
