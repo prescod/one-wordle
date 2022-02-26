@@ -6,6 +6,7 @@ import {
 import { useState, useEffect } from 'react'
 import { Grid } from './components/grid/Grid'
 import { HintButton } from './components/grid/HintButton'
+import { GoButton } from './components/grid/GoButton'
 import { Keyboard } from './components/keyboard/Keyboard'
 import { InfoModal } from './components/modals/InfoModal'
 import { StatsModal } from './components/modals/StatsModal'
@@ -325,11 +326,12 @@ function App() {
         isRevealing={isRevealing}
       />
       <div className="flex pt-6 mb-1 justify-center">
+        <GoButton solution={solution} hints={guesses} action={onEnter} />
         <HintButton
           solution={solution}
           hints={guesses}
-          addHint={(hint: string) => {
-            showAnswer(hint)
+          action={() => {
+            showAnswer('XXXXX')
           }}
         />
       </div>{' '}
