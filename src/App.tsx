@@ -240,14 +240,24 @@ function App() {
       }
     }
 
+    const winningWord = isWinningWord(currentGuess)
+
+    if (!winningWord) {
+      setCurrentRowClass('jiggle')
+      return showErrorAlert(
+        "That's A word, but not THE word! Cludle messed up!",
+        {
+          onClose: clearCurrentRowClass,
+        }
+      )
+    }
+
     setIsRevealing(true)
     // turn this back off after all
     // chars have been revealed
     setTimeout(() => {
       setIsRevealing(false)
     }, REVEAL_TIME_MS * MAX_WORD_LENGTH)
-
-    const winningWord = isWinningWord(currentGuess)
 
     if (
       unicodeLength(currentGuess) === MAX_WORD_LENGTH &&
@@ -325,16 +335,18 @@ function App() {
         guesses={guesses}
         isRevealing={isRevealing}
       />
-      <div className="flex pt-6 mb-1 justify-center">
-        <GoButton solution={solution} hints={guesses} action={onEnter} />
-        <HintButton
-          solution={solution}
-          hints={guesses}
-          action={() => {
-            showAnswer('XXXXX')
-          }}
-        />
-      </div>{' '}
+      {!(isGameWon || isGameLost) && (
+        <div className="flex pt-6 mb-1 justify-center">
+          <GoButton solution={solution} hints={guesses} action={onEnter} />
+          <HintButton
+            solution={solution}
+            hints={guesses}
+            action={() => {
+              showAnswer('XXXXX')
+            }}
+          />
+        </div>
+      )}
       <InfoModal
         isOpen={isInfoModalOpen}
         handleClose={() => setIsInfoModalOpen(false)}
